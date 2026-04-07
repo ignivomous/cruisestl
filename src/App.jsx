@@ -10,6 +10,7 @@ const TYPE_META = {
   "swap-meet":    { label: "Swap Meet",    color: "#4ECDC4", bg: "rgba(78,205,196,0.15)" },
   "drag-race":    { label: "Drag Race",    color: "#A78BFA", bg: "rgba(167,139,250,0.15)" },
   "other":        { label: "Other",        color: "#94A3B8", bg: "rgba(148,163,184,0.15)" },
+  "cars-and-coffee": { label: "Cars & Coffee", color: "#34D399", bg: "rgba(52,211,153,0.15)" },
 };
 
 const REGION_META = {
