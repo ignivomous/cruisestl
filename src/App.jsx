@@ -333,12 +333,12 @@ export default function App() {
                 <div style={{display:"flex",gap:14}}>
                   <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:10,letterSpacing:"0.12em",color:"#444",textTransform:"uppercase",width:60,minWidth:60,paddingTop:1}}>Venue</span>
                   {selected.venue!=="TBD"
-                    ?<a href={googleMapsUrl(selected.venue, selected.city, selected.state, selected.address)} ↗</a>
+                    ?<a href={googleMapsUrl(selected.venue, selected.city, selected.state, selected.address)} target="_blank" rel="noopener noreferrer" className="mlink" style={{fontFamily:"'Barlow',sans-serif",fontSize:13,color:"#A8A098"}}>{selected.venue} ↗</a>
                     :<span style={{fontFamily:"'Barlow',sans-serif",fontSize:13,color:"#333"}}>TBD</span>}
                 </div>
                 <div style={{display:"flex",gap:14}}>
                   <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:10,letterSpacing:"0.12em",color:"#444",textTransform:"uppercase",width:60,minWidth:60,paddingTop:1}}>Location</span>
-                  <a href={googleMapsUrl(selected.venue, selected.city, selected.state, selected.address)}>
+                  <a href={googleMapsUrl(selected.venue, selected.city, selected.state, selected.address)} target="_blank" rel="noopener noreferrer" className="mlink" style={{fontFamily:"'Barlow',sans-serif",fontSize:13,color:"#A8A098"}}>
                     {selected.city}{selected.state?`, ${selected.state}`:""} ↗
                   </a>
                 </div>
