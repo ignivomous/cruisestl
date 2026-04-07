@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { supabase } from "./supabase";
 
 const MONTHS = ["April","May","June","July","August","September","October"];
@@ -10,7 +11,6 @@ const TYPE_META = {
   "swap-meet":    { label: "Swap Meet",    color: "#4ECDC4", bg: "rgba(78,205,196,0.15)" },
   "drag-race":    { label: "Drag Race",    color: "#A78BFA", bg: "rgba(167,139,250,0.15)" },
   "other":        { label: "Other",        color: "#94A3B8", bg: "rgba(148,163,184,0.15)" },
-  "cars-and-coffee": { label: "Cars & Coffee", color: "#34D399", bg: "rgba(52,211,153,0.15)" },
 };
 
 const REGION_META = {
@@ -56,10 +56,8 @@ function isThisWeekend(dateStr, dateEndStr) {
   return new Date(dateStr + "T00:00:00") <= sunday && new Date((dateEndStr || dateStr) + "T23:59:59") >= friday;
 }
 
-function googleMapsUrl(venue, city, state, address) {
-  const q = address
-    ? encodeURIComponent(address)
-    : encodeURIComponent(`${venue !== "TBD" ? venue + ", " : ""}${city}${state ? ", " + state : ""}`);
+function googleMapsUrl(venue, city, state) {
+  const q = encodeURIComponent(`${venue !== "TBD" ? venue + ", " : ""}${city}${state ? ", " + state : ""}`);
   return `https://www.google.com/maps/search/?api=1&query=${q}`;
 }
 
@@ -173,11 +171,11 @@ export default function App() {
             </div>
             <p className="hm" style={{fontFamily:"'Barlow',sans-serif",fontSize:12,color:"#444",marginTop:2}}>Shows · Cruise Nights · Swap Meets · Drag Races — St. Louis region</p>
           </div>
-          <a href="https://forms.gle/placeholder" target="_blank" rel="noopener noreferrer" className="sbtn" style={{
+          <Link to="/submit" className="sbtn" style={{
             padding:"8px 16px",background:"transparent",border:"1px solid #E84040",color:"#E84040",
             fontFamily:"'Barlow Condensed',sans-serif",fontWeight:600,fontSize:12,letterSpacing:"0.12em",
             textTransform:"uppercase",borderRadius:3,textDecoration:"none",whiteSpace:"nowrap",flexShrink:0,
-          }}>+ Submit Event</a>
+          }}>+ Submit Event</Link>
         </div>
       </div>
 
@@ -333,12 +331,12 @@ export default function App() {
                 <div style={{display:"flex",gap:14}}>
                   <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:10,letterSpacing:"0.12em",color:"#444",textTransform:"uppercase",width:60,minWidth:60,paddingTop:1}}>Venue</span>
                   {selected.venue!=="TBD"
-                    ?<a href={googleMapsUrl(selected.venue, selected.city, selected.state, selected.address)} target="_blank" rel="noopener noreferrer" className="mlink" style={{fontFamily:"'Barlow',sans-serif",fontSize:13,color:"#A8A098"}}>{selected.venue} ↗</a>
+                    ?<a href={googleMapsUrl(selected.venue,selected.city,selected.state)} target="_blank" rel="noopener noreferrer" className="mlink" style={{fontFamily:"'Barlow',sans-serif",fontSize:13,color:"#A8A098"}}>{selected.venue} ↗</a>
                     :<span style={{fontFamily:"'Barlow',sans-serif",fontSize:13,color:"#333"}}>TBD</span>}
                 </div>
                 <div style={{display:"flex",gap:14}}>
                   <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:10,letterSpacing:"0.12em",color:"#444",textTransform:"uppercase",width:60,minWidth:60,paddingTop:1}}>Location</span>
-                  <a href={googleMapsUrl(selected.venue, selected.city, selected.state, selected.address)} target="_blank" rel="noopener noreferrer" className="mlink" style={{fontFamily:"'Barlow',sans-serif",fontSize:13,color:"#A8A098"}}>
+                  <a href={googleMapsUrl(selected.venue,selected.city,selected.state)} target="_blank" rel="noopener noreferrer" className="mlink" style={{fontFamily:"'Barlow',sans-serif",fontSize:13,color:"#A8A098"}}>
                     {selected.city}{selected.state?`, ${selected.state}`:""} ↗
                   </a>
                 </div>
