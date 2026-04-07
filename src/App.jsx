@@ -56,8 +56,10 @@ function isThisWeekend(dateStr, dateEndStr) {
   return new Date(dateStr + "T00:00:00") <= sunday && new Date((dateEndStr || dateStr) + "T23:59:59") >= friday;
 }
 
-function googleMapsUrl(venue, city, state) {
-  const q = encodeURIComponent(`${venue !== "TBD" ? venue + ", " : ""}${city}${state ? ", " + state : ""}`);
+function googleMapsUrl(venue, city, state, address) {
+  const q = address
+    ? encodeURIComponent(address)
+    : encodeURIComponent(`${venue !== "TBD" ? venue + ", " : ""}${city}${state ? ", " + state : ""}`);
   return `https://www.google.com/maps/search/?api=1&query=${q}`;
 }
 
@@ -331,12 +333,12 @@ export default function App() {
                 <div style={{display:"flex",gap:14}}>
                   <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:10,letterSpacing:"0.12em",color:"#444",textTransform:"uppercase",width:60,minWidth:60,paddingTop:1}}>Venue</span>
                   {selected.venue!=="TBD"
-                    ?<a href={googleMapsUrl(selected.venue,selected.city,selected.state)} target="_blank" rel="noopener noreferrer" className="mlink" style={{fontFamily:"'Barlow',sans-serif",fontSize:13,color:"#A8A098"}}>{selected.venue} ↗</a>
+                    ?<a href={googleMapsUrl(selected.venue, selected.city, selected.state, selected.address)} ↗</a>
                     :<span style={{fontFamily:"'Barlow',sans-serif",fontSize:13,color:"#333"}}>TBD</span>}
                 </div>
                 <div style={{display:"flex",gap:14}}>
                   <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:10,letterSpacing:"0.12em",color:"#444",textTransform:"uppercase",width:60,minWidth:60,paddingTop:1}}>Location</span>
-                  <a href={googleMapsUrl(selected.venue,selected.city,selected.state)} target="_blank" rel="noopener noreferrer" className="mlink" style={{fontFamily:"'Barlow',sans-serif",fontSize:13,color:"#A8A098"}}>
+                  <a href={googleMapsUrl(selected.venue, selected.city, selected.state, selected.address)}>
                     {selected.city}{selected.state?`, ${selected.state}`:""} ↗
                   </a>
                 </div>
