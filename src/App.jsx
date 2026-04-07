@@ -166,7 +166,9 @@ export default function App() {
         <div className="hi" style={{padding:"18px 40px 14px",maxWidth:940,margin:"0 auto",display:"flex",alignItems:"center",justifyContent:"space-between",gap:12}}>
           <div>
             <div style={{display:"flex",alignItems:"baseline",gap:10,flexWrap:"wrap"}}>
-              <h1 style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:"clamp(34px,5.5vw,58px)",letterSpacing:"0.06em",lineHeight:1,color:"#F0E8D8"}}>CruiseSTL</h1>
+              <h1 style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:"clamp(34px,5.5vw,58px)",letterSpacing:"0.06em",lineHeight:1,color:"#F0E8D8"}}>
+  CRUISE<span style={{color:"#E84040"}}>STL</span>
+</h1>
               <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:12,fontWeight:600,letterSpacing:"0.2em",color:"#E84040",textTransform:"uppercase"}}>2026 Season</span>
             </div>
             <p className="hm" style={{fontFamily:"'Barlow',sans-serif",fontSize:12,color:"#444",marginTop:2}}>Shows · Cruise Nights · Swap Meets · Drag Races — St. Louis region</p>
