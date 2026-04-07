@@ -305,7 +305,9 @@ export default function App() {
 
             {/* Footer */}
             <div style={{marginTop:56,paddingTop:18,borderTop:"1px solid #181818",display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:10}}>
-              <span style={{fontFamily:"'Barlow',sans-serif",fontSize:11,color:"#2a2a2a"}}>Community-sourced · St. Louis car culture</span>
+              <span style={{fontFamily:"'Barlow',sans-serif",fontSize:11,color:"#2a2a2a"}}>
+  Community-sourced · St. Louis car culture · <a href="mailto:cruisestlcom@gmail.com" style={{color:"#3a3a3a",textDecoration:"none"}}>cruisestlcom@gmail.com</a>
+</span>
               <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:10,color:"#222",letterSpacing:"0.1em"}}>CRUISESTL · 2026</span>
             </div>
           </>
