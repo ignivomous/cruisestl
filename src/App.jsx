@@ -6,12 +6,12 @@ const MONTHS = ["April","May","June","July","August","September","October"];
 const MONTH_NUMS = [4,5,6,7,8,9,10];
 
 const TYPE_META = {
-  "car-show":        { label: "Car Show",       color: "#E84040", bg: "rgba(232,64,64,0.15)" },
-  "cruise-night":    { label: "Cruise Night",   color: "#F5A623", bg: "rgba(245,166,35,0.15)" },
-  "swap-meet":       { label: "Swap Meet",      color: "#4ECDC4", bg: "rgba(78,205,196,0.15)" },
-  "drag-race":       { label: "Drag Race",      color: "#A78BFA", bg: "rgba(167,139,250,0.15)" },
-  "cars-and-coffee": { label: "Cars & Coffee",  color: "#34D399", bg: "rgba(52,211,153,0.15)" },
-  "other":           { label: "Other",          color: "#94A3B8", bg: "rgba(148,163,184,0.15)" },
+  "car-show":        { label: "Car Show",      color: "#E84040", bg: "rgba(232,64,64,0.15)" },
+  "cruise-night":    { label: "Cruise Night",  color: "#F5A623", bg: "rgba(245,166,35,0.15)" },
+  "swap-meet":       { label: "Swap Meet",     color: "#4ECDC4", bg: "rgba(78,205,196,0.15)" },
+  "drag-race":       { label: "Drag Race",     color: "#A78BFA", bg: "rgba(167,139,250,0.15)" },
+  "cars-and-coffee": { label: "Cars & Coffee", color: "#34D399", bg: "rgba(52,211,153,0.15)" },
+  "other":           { label: "Other",         color: "#94A3B8", bg: "rgba(148,163,184,0.15)" },
 };
 
 const REGION_META = {
@@ -167,9 +167,7 @@ export default function App() {
         <div className="hi" style={{padding:"18px 40px 14px",maxWidth:940,margin:"0 auto",display:"flex",alignItems:"center",justifyContent:"space-between",gap:12}}>
           <div>
             <div style={{display:"flex",alignItems:"baseline",gap:10,flexWrap:"wrap"}}>
-              <h1 style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:"clamp(34px,5.5vw,58px)",letterSpacing:"0.06em",lineHeight:1,color:"#F0E8D8"}}>
-  CRUISE<span style={{color:"#E84040"}}>STL</span>
-</h1>
+              <h1 style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:"clamp(34px,5.5vw,58px)",letterSpacing:"0.06em",lineHeight:1,color:"#F0E8D8"}}>CruiseSTL</h1>
               <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:12,fontWeight:600,letterSpacing:"0.2em",color:"#E84040",textTransform:"uppercase"}}>2026 Season</span>
             </div>
             <p className="hm" style={{fontFamily:"'Barlow',sans-serif",fontSize:12,color:"#444",marginTop:2}}>Shows · Cruise Nights · Swap Meets · Drag Races — St. Louis region</p>
@@ -306,9 +304,7 @@ export default function App() {
 
             {/* Footer */}
             <div style={{marginTop:56,paddingTop:18,borderTop:"1px solid #181818",display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:10}}>
-              <span style={{fontFamily:"'Barlow',sans-serif",fontSize:11,color:"#2a2a2a"}}>
-  Community-sourced · St. Louis car culture · <a href="mailto:cruisestlcom@gmail.com" style={{color:"#3a3a3a",textDecoration:"none"}}>cruisestlcom@gmail.com</a>
-</span>
+              <span style={{fontFamily:"'Barlow',sans-serif",fontSize:11,color:"#2a2a2a"}}>Community-sourced · St. Louis car culture</span>
               <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:10,color:"#222",letterSpacing:"0.1em"}}>CRUISESTL · 2026</span>
             </div>
           </>
@@ -333,6 +329,9 @@ export default function App() {
               {selected.image&&<img src={selected.image} alt="Event flyer" style={{width:"100%",borderRadius:3,marginBottom:16,border:"1px solid #1e1e1e"}}/>}
               <div style={{display:"flex",flexDirection:"column",gap:9,marginBottom:20}}>
                 <MRow label="Date" value={formatDate(selected.date,selected.date_end)}/>
+                {(selected.time_start||selected.time_end)&&(
+                  <MRow label="Time" value={[selected.time_start,selected.time_end].filter(Boolean).join(" – ")}/>
+                )}
                 <div style={{display:"flex",gap:14}}>
                   <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:10,letterSpacing:"0.12em",color:"#444",textTransform:"uppercase",width:60,minWidth:60,paddingTop:1}}>Venue</span>
                   {selected.venue!=="TBD"
@@ -352,6 +351,7 @@ export default function App() {
                     <a href={selected.url} target="_blank" rel="noopener noreferrer" className="mlink" style={{fontFamily:"'Barlow',sans-serif",fontSize:13,color:"#A8A098"}}>Visit website ↗</a>
                   </div>
                 )}
+                {selected.notes&&<MRow label="Notes" value={selected.notes}/>}
               </div>
               <div style={{display:"flex",gap:8}}>
                 <a href={addToCalendarUrl(selected)} target="_blank" rel="noopener noreferrer" style={{flex:1,padding:"9px",textAlign:"center",background:"rgba(232,64,64,0.08)",border:"1px solid rgba(232,64,64,0.25)",color:"#E84040",fontFamily:"'Barlow Condensed',sans-serif",fontSize:11,letterSpacing:"0.1em",textTransform:"uppercase",borderRadius:3,textDecoration:"none"}}>

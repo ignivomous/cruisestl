@@ -32,6 +32,8 @@ const EMPTY = {
   state: "",
   region: "",
   recurring: false,
+  time_start: "",
+  time_end: "",
   url: "",
   notes: "",
   submitter_name: "",
@@ -121,6 +123,8 @@ export default function Submit() {
       recurring: form.recurring,
       url: form.url.trim() || null,
       image: imageUrl,
+      time_start: form.time_start.trim() || null,
+      time_end: form.time_end.trim() || null,
       notes: form.notes.trim() || null,
       submitter_name: form.submitter_name.trim() || null,
       submitter_email: form.submitter_email.trim() || null,
@@ -260,6 +264,18 @@ export default function Submit() {
               <p style={{ fontFamily: "'Barlow',sans-serif", fontSize: 11, color: "#333", marginTop: 6 }}>
                 For recurring series, add each date separately. End date is only needed for multi-day events.
               </p>
+            </div>
+
+            {/* Time */}
+            <div className="form-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 20 }}>
+              <div>
+                <label>Start Time</label>
+                <input className="finput" type="time" value={form.time_start} onChange={e => set("time_start", e.target.value)} />
+              </div>
+              <div>
+                <label>End Time</label>
+                <input className="finput" type="time" value={form.time_end} onChange={e => set("time_end", e.target.value)} />
+              </div>
             </div>
 
             {/* Event Types */}

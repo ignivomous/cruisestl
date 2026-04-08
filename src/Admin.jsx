@@ -53,6 +53,9 @@ export default function Admin() {
       recurring: sub.recurring,
       url: sub.url || null,
       image: sub.image || null,
+      time_start: sub.time_start || null,
+      time_end: sub.time_end || null,
+      notes: sub.notes || null,
     }]);
     await supabase.from("submissions").update({ status: "approved" }).eq("id", sub.id);
     setActionStatus(p => ({ ...p, [sub.id]: "approved" }));
@@ -183,11 +186,13 @@ export default function Admin() {
                 {/* Details */}
                 <div style={{ marginBottom: 16 }}>
                   <div className="row"><span className="rlabel">Date</span><span className="rval">{formatDate(sub.date)}{sub.date_end ? ` – ${formatDate(sub.date_end)}` : ""}</span></div>
+                  {(sub.time_start||sub.time_end)&&<div className="row"><span className="rlabel">Time</span><span className="rval">{[sub.time_start,sub.time_end].filter(Boolean).join(" – ")}</span></div>}
                   <div className="row"><span className="rlabel">Venue</span><span className="rval">{sub.venue || "—"}</span></div>
                   {sub.address && <div className="row"><span className="rlabel">Address</span><span className="rval">{sub.address}</span></div>}
                   <div className="row"><span className="rlabel">Location</span><span className="rval">{sub.city}{sub.state ? `, ${sub.state}` : ""}</span></div>
                   <div className="row"><span className="rlabel">Region</span><span className="rval">{sub.region || "—"}</span></div>
                   {sub.url && <div className="row"><span className="rlabel">Link</span><a href={sub.url} target="_blank" rel="noopener noreferrer" style={{ fontFamily: "'Barlow',sans-serif", fontSize: 13, color: "#F5A623", textDecoration: "none" }}>{sub.url}</a></div>}
+                  {sub.notes && <div className="row"><span className="rlabel">Notes</span><span className="rval">{sub.notes}</span></div>}
                   {sub.notes && <div className="row"><span className="rlabel">Notes</span><span className="rval">{sub.notes}</span></div>}
                   {(sub.submitter_name || sub.submitter_email) && (
                     <div className="row">
