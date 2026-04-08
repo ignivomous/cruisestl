@@ -190,6 +190,19 @@ export default function Submit() {
               <input className="finput" type="text" placeholder="e.g. Cruisin Lindbergh" value={form.name} onChange={e => set("name", e.target.value)} />
             </div>
 
+            {/* Recurring */}
+            <div style={{ marginBottom: 20 }}>
+              <label>Does this event repeat?</label>
+              <div style={{ display: "flex", gap: 8 }}>
+                <div className={`rchip${form.recurring ? " active" : ""}`} onClick={() => set("recurring", true)}>
+                  Yes — recurring series
+                </div>
+                <div className={`rchip${!form.recurring ? " active" : ""}`} onClick={() => set("recurring", false)}>
+                  No — one time
+                </div>
+              </div>
+            </div>
+            
             {/* Dates — multi-date */}
             <div style={{ marginBottom: 20 }}>
               <label>Date(s) <span className="req">*</span></label>
@@ -274,18 +287,7 @@ export default function Submit() {
               </div>
             </div>
 
-            {/* Recurring */}
-            <div style={{ marginBottom: 20 }}>
-              <label>Does this event repeat?</label>
-              <div style={{ display: "flex", gap: 8 }}>
-                <div className={`rchip${form.recurring ? " active" : ""}`} onClick={() => set("recurring", true)}>
-                  Yes — recurring series
-                </div>
-                <div className={`rchip${!form.recurring ? " active" : ""}`} onClick={() => set("recurring", false)}>
-                  No — one time
-                </div>
-              </div>
-            </div>
+
 
             {/* URL */}
             <div style={{ marginBottom: 20 }}>
