@@ -3,27 +3,28 @@ import { Link } from "react-router-dom";
 import { supabase } from "./supabase";
 
 const TYPES = [
-  { value: "car-show",       label: "Car Show" },
-  { value: "cruise-night",   label: "Cruise Night" },
-  { value: "swap-meet",      label: "Swap Meet" },
-  { value: "drag-race",      label: "Drag Race" },
-  { value: "cars-and-coffee",label: "Cars & Coffee" },
-  { value: "other",          label: "Other" },
+  { value: "car-show",        label: "Car Show" },
+  { value: "cruise-night",    label: "Cruise Night" },
+  { value: "swap-meet",       label: "Swap Meet" },
+  { value: "drag-race",       label: "Drag Race" },
+  { value: "cars-and-coffee", label: "Cars & Coffee" },
+  { value: "other",           label: "Other" },
 ];
 
 const REGIONS = [
-  { value: "downtown",      label: "Downtown / Inner Ring" },
-  { value: "west",          label: "West County" },
-  { value: "south",         label: "South County" },
-  { value: "st-charles",    label: "St. Charles" },
-  { value: "metro-east",    label: "Metro East (IL)" },
+  { value: "city-central",  label: "City / Central" },
+  { value: "west",          label: "West" },
+  { value: "south",         label: "South" },
+  { value: "east",          label: "East" },
+  { value: "north",         label: "North" },
   { value: "out-of-region", label: "Road Trip (60+ miles)" },
 ];
 
+const EMPTY_DATE = { date: "", date_end: "" };
+
 const EMPTY = {
   name: "",
-  date: "",
-  date_end: "",
+  dates: [{ date: "", date_end: "" }],
   types: [],
   venue: "",
   address: "",
@@ -39,7 +40,7 @@ const EMPTY = {
 
 export default function Submit() {
   const [form, setForm] = useState(EMPTY);
-  const [status, setStatus] = useState("idle"); // idle | submitting | success | error
+  const [status, setStatus] = useState("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
   const set = (field, value) => setForm(p => ({ ...p, [field]: value }));
@@ -51,19 +52,35 @@ export default function Submit() {
     }));
   };
 
+  const setDate = (index, field, value) => {
+    setForm(p => {
+      const dates = [...p.dates];
+      dates[index] = { ...dates[index], [field]: value };
+      return { ...p, dates };
+    });
+  };
+
+  const addDate = () => setForm(p => ({ ...p, dates: [...p.dates, { ...EMPTY_DATE }] }));
+
+  const removeDate = (index) => setForm(p => ({
+    ...p,
+    dates: p.dates.filter((_, i) => i !== index)
+  }));
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.name || !form.date || form.types.length === 0 || !form.city || !form.region) {
-      setErrorMsg("Please fill in all required fields.");
+    const validDates = form.dates.filter(d => d.date);
+    if (!form.name || validDates.length === 0 || form.types.length === 0 || !form.city || !form.region) {
+      setErrorMsg("Please fill in all required fields including at least one date.");
       return;
     }
     setStatus("submitting");
     setErrorMsg("");
 
-    const payload = {
+    const rows = validDates.map(d => ({
       name: form.name.trim(),
-      date: form.date,
-      date_end: form.date_end || null,
+      date: d.date,
+      date_end: d.date_end || null,
       types: form.types.join(","),
       venue: form.venue.trim() || "TBD",
       address: form.address.trim() || null,
@@ -76,9 +93,9 @@ export default function Submit() {
       submitter_name: form.submitter_name.trim() || null,
       submitter_email: form.submitter_email.trim() || null,
       status: "pending",
-    };
+    }));
 
-    const { error } = await supabase.from("submissions").insert([payload]);
+    const { error } = await supabase.from("submissions").insert(rows);
 
     if (error) {
       setStatus("error");
@@ -107,9 +124,13 @@ export default function Submit() {
         .submit-btn{width:100%;padding:12px;background:#E84040;border:none;border-radius:3px;color:#fff;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:14px;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:background .15s;}
         .submit-btn:hover{background:#cc3333;}
         .submit-btn:disabled{background:#2a2a2a;color:#555;cursor:not-allowed;}
+        .add-date-btn{display:flex;align-items:center;gap:6px;padding:7px 14px;background:transparent;border:1px dashed #2a2a2a;border-radius:3px;color:#555;font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all .15s;margin-top:8px;}
+        .add-date-btn:hover{border-color:#E84040;color:#E84040;}
+        .remove-date-btn{padding:0 8px;background:transparent;border:none;color:#333;font-size:16px;cursor:pointer;transition:color .15s;line-height:1;align-self:center;}
+        .remove-date-btn:hover{color:#E84040;}
         label{display:block;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#555;margin-bottom:6px;}
         .req{color:#E84040;margin-left:2px;}
-        @media(max-width:640px){.form-grid{grid-template-columns:1fr!important;}}
+        @media(max-width:640px){.form-grid{grid-template-columns:1fr!important;}.date-grid{grid-template-columns:1fr!important;}}
       `}</style>
 
       {/* Header */}
@@ -118,7 +139,7 @@ export default function Submit() {
         <div style={{ padding: "18px 40px 14px", maxWidth: 700, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
           <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
             <Link to="/" style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: "clamp(28px,4vw,46px)", letterSpacing: "0.06em", lineHeight: 1, color: "#F0E8D8", textDecoration: "none" }}>
-              CruiseSTL
+              CRUISE<span style={{ color: "#E84040" }}>STL</span>
             </Link>
             <span style={{ fontFamily: "'Barlow Condensed',sans-serif", fontSize: 11, fontWeight: 600, letterSpacing: "0.2em", color: "#E84040", textTransform: "uppercase" }}>Submit Event</span>
           </div>
@@ -135,8 +156,11 @@ export default function Submit() {
             <div style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 42, color: "#34D399", letterSpacing: "0.06em", marginBottom: 12 }}>
               Thanks!
             </div>
-            <p style={{ fontFamily: "'Barlow',sans-serif", fontSize: 14, color: "#777", marginBottom: 32, lineHeight: 1.6 }}>
-              Your event has been submitted for review. We'll get it on the calendar soon.
+            <p style={{ fontFamily: "'Barlow',sans-serif", fontSize: 14, color: "#777", marginBottom: 8, lineHeight: 1.6 }}>
+              Your event has been submitted for review.
+            </p>
+            <p style={{ fontFamily: "'Barlow',sans-serif", fontSize: 13, color: "#555", marginBottom: 32, lineHeight: 1.6 }}>
+              Once approved it'll appear on the calendar automatically — usually within 24–48 hours. No follow-up needed.
             </p>
             <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
               <button onClick={() => setStatus("idle")} style={{ padding: "9px 20px", background: "rgba(232,64,64,0.1)", border: "1px solid rgba(232,64,64,0.3)", color: "#E84040", fontFamily: "'Barlow Condensed',sans-serif", fontSize: 12, letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer", borderRadius: 3 }}>
@@ -166,16 +190,39 @@ export default function Submit() {
               <input className="finput" type="text" placeholder="e.g. Cruisin Lindbergh" value={form.name} onChange={e => set("name", e.target.value)} />
             </div>
 
-            {/* Dates */}
-            <div className="form-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 20 }}>
-              <div>
-                <label>Date <span className="req">*</span></label>
-                <input className="finput" type="date" value={form.date} onChange={e => set("date", e.target.value)} />
+            {/* Dates — multi-date */}
+            <div style={{ marginBottom: 20 }}>
+              <label>Date(s) <span className="req">*</span></label>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {form.dates.map((d, i) => (
+                  <div key={i} style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                    <div className="date-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, flex: 1 }}>
+                      <input
+                        className="finput"
+                        type="date"
+                        value={d.date}
+                        onChange={e => setDate(i, "date", e.target.value)}
+                      />
+                      <input
+                        className="finput"
+                        type="date"
+                        placeholder="End date (optional)"
+                        value={d.date_end}
+                        onChange={e => setDate(i, "date_end", e.target.value)}
+                      />
+                    </div>
+                    {form.dates.length > 1 && (
+                      <button type="button" className="remove-date-btn" onClick={() => removeDate(i)}>×</button>
+                    )}
+                  </div>
+                ))}
               </div>
-              <div>
-                <label>End Date <span style={{ color: "#333", fontSize: 10 }}>(multi-day events)</span></label>
-                <input className="finput" type="date" value={form.date_end} onChange={e => set("date_end", e.target.value)} />
-              </div>
+              <button type="button" className="add-date-btn" onClick={addDate}>
+                + Add another date
+              </button>
+              <p style={{ fontFamily: "'Barlow',sans-serif", fontSize: 11, color: "#333", marginTop: 6 }}>
+                For recurring series, add each date separately. End date is only needed for multi-day events.
+              </p>
             </div>
 
             {/* Event Types */}
@@ -256,11 +303,9 @@ export default function Submit() {
             <div style={{ borderTop: "1px solid #1a1a1a", marginBottom: 28 }} />
 
             {/* Submitter info */}
-            <div style={{ marginBottom: 8 }}>
-              <p style={{ fontFamily: "'Barlow',sans-serif", fontSize: 12, color: "#444", marginBottom: 16 }}>
-                Optional — in case we need to follow up.
-              </p>
-            </div>
+            <p style={{ fontFamily: "'Barlow',sans-serif", fontSize: 12, color: "#444", marginBottom: 16 }}>
+              Optional — in case we need to follow up.
+            </p>
             <div className="form-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 28 }}>
               <div>
                 <label>Your Name</label>
