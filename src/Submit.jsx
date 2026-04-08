@@ -40,6 +40,8 @@ const EMPTY = {
 
 export default function Submit() {
   const [form, setForm] = useState(EMPTY);
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [status, setStatus] = useState("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -67,6 +69,18 @@ export default function Submit() {
     dates: p.dates.filter((_, i) => i !== index)
   }));
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setImageFile(file);
+    setImagePreview(URL.createObjectURL(file));
+  };
+
+  const clearImage = () => {
+    setImageFile(null);
+    setImagePreview(null);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const validDates = form.dates.filter(d => d.date);
@@ -76,6 +90,23 @@ export default function Submit() {
     }
     setStatus("submitting");
     setErrorMsg("");
+
+    // Upload image if provided
+    let imageUrl = null;
+    if (imageFile) {
+      const ext = imageFile.name.split(".").pop();
+      const filename = `submissions/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+      const { error: uploadError } = await supabase.storage
+        .from("flyers")
+        .upload(filename, imageFile, { contentType: imageFile.type });
+      if (uploadError) {
+        setStatus("error");
+        setErrorMsg(`Image upload failed: ${uploadError.message}`);
+        return;
+      }
+      const { data } = supabase.storage.from("flyers").getPublicUrl(filename);
+      imageUrl = data.publicUrl;
+    }
 
     const rows = validDates.map(d => ({
       name: form.name.trim(),
@@ -89,6 +120,7 @@ export default function Submit() {
       region: form.region,
       recurring: form.recurring,
       url: form.url.trim() || null,
+      image: imageUrl,
       notes: form.notes.trim() || null,
       submitter_name: form.submitter_name.trim() || null,
       submitter_email: form.submitter_email.trim() || null,
@@ -103,6 +135,8 @@ export default function Submit() {
     } else {
       setStatus("success");
       setForm(EMPTY);
+      setImageFile(null);
+      setImagePreview(null);
     }
   };
 
@@ -128,6 +162,9 @@ export default function Submit() {
         .add-date-btn:hover{border-color:#E84040;color:#E84040;}
         .remove-date-btn{padding:0 8px;background:transparent;border:none;color:#333;font-size:16px;cursor:pointer;transition:color .15s;line-height:1;align-self:center;}
         .remove-date-btn:hover{color:#E84040;}
+        .upload-zone{width:100%;padding:24px;background:#0f0f0f;border:1px dashed #2a2a2a;border-radius:3px;text-align:center;cursor:pointer;transition:border-color .15s;position:relative;}
+        .upload-zone:hover{border-color:#555;}
+        .upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
         label{display:block;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#555;margin-bottom:6px;}
         .req{color:#E84040;margin-left:2px;}
         @media(max-width:640px){.form-grid{grid-template-columns:1fr!important;}.date-grid{grid-template-columns:1fr!important;}}
@@ -202,27 +239,16 @@ export default function Submit() {
                 </div>
               </div>
             </div>
-            
-            {/* Dates — multi-date */}
+
+            {/* Dates */}
             <div style={{ marginBottom: 20 }}>
               <label>Date(s) <span className="req">*</span></label>
               <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                 {form.dates.map((d, i) => (
                   <div key={i} style={{ display: "flex", gap: 8, alignItems: "center" }}>
                     <div className="date-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, flex: 1 }}>
-                      <input
-                        className="finput"
-                        type="date"
-                        value={d.date}
-                        onChange={e => setDate(i, "date", e.target.value)}
-                      />
-                      <input
-                        className="finput"
-                        type="date"
-                        placeholder="End date (optional)"
-                        value={d.date_end}
-                        onChange={e => setDate(i, "date_end", e.target.value)}
-                      />
+                      <input className="finput" type="date" value={d.date} onChange={e => setDate(i, "date", e.target.value)} />
+                      <input className="finput" type="date" value={d.date_end} onChange={e => setDate(i, "date_end", e.target.value)} />
                     </div>
                     {form.dates.length > 1 && (
                       <button type="button" className="remove-date-btn" onClick={() => removeDate(i)}>×</button>
@@ -230,9 +256,7 @@ export default function Submit() {
                   </div>
                 ))}
               </div>
-              <button type="button" className="add-date-btn" onClick={addDate}>
-                + Add another date
-              </button>
+              <button type="button" className="add-date-btn" onClick={addDate}>+ Add another date</button>
               <p style={{ fontFamily: "'Barlow',sans-serif", fontSize: 11, color: "#333", marginTop: 6 }}>
                 For recurring series, add each date separately. End date is only needed for multi-day events.
               </p>
@@ -287,7 +311,28 @@ export default function Submit() {
               </div>
             </div>
 
-
+            {/* Flyer / Image upload */}
+            <div style={{ marginBottom: 20 }}>
+              <label>Flyer or Photo <span style={{ color: "#333", fontSize: 10 }}>(optional)</span></label>
+              {imagePreview ? (
+                <div style={{ position: "relative" }}>
+                  <img src={imagePreview} alt="Preview" style={{ width: "100%", maxHeight: 240, objectFit: "contain", borderRadius: 3, border: "1px solid #222", background: "#0a0a0a" }} />
+                  <button type="button" onClick={clearImage} style={{ position: "absolute", top: 8, right: 8, background: "rgba(0,0,0,0.7)", border: "1px solid #333", color: "#aaa", borderRadius: 3, padding: "4px 10px", cursor: "pointer", fontFamily: "'Barlow',sans-serif", fontSize: 12 }}>
+                    Remove
+                  </button>
+                </div>
+              ) : (
+                <div className="upload-zone">
+                  <input type="file" accept="image/*" onChange={handleImageChange} />
+                  <div style={{ fontFamily: "'Barlow Condensed',sans-serif", fontSize: 13, letterSpacing: "0.08em", color: "#444", textTransform: "uppercase" }}>
+                    Click to upload flyer or photo
+                  </div>
+                  <div style={{ fontFamily: "'Barlow',sans-serif", fontSize: 11, color: "#333", marginTop: 4 }}>
+                    JPG, PNG — max 5MB
+                  </div>
+                </div>
+              )}
+            </div>
 
             {/* URL */}
             <div style={{ marginBottom: 20 }}>
@@ -328,7 +373,7 @@ export default function Submit() {
 
             {/* Submit */}
             <button className="submit-btn" type="submit" disabled={status === "submitting"}>
-              {status === "submitting" ? "Submitting..." : "Submit Event"}
+              {status === "submitting" ? "Uploading & Submitting..." : "Submit Event"}
             </button>
 
           </form>
