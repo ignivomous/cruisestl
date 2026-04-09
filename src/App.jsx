@@ -276,7 +276,7 @@ export default function App() {
                               {event.recurring&&<span style={{fontSize:8,fontFamily:"'Barlow Condensed',sans-serif",letterSpacing:"0.1em",color:"#3a3a3a",textTransform:"uppercase",border:"1px solid #1e1e1e",padding:"1px 4px",borderRadius:2,whiteSpace:"nowrap"}}>Series</span>}
                             </div>
                             <div style={{fontFamily:"'Barlow',sans-serif",fontSize:11,color:"#4a4a4a",marginTop:2}}>
-                              {event.venue!=="TBD"&&<span className="hm">{event.venue} · </span>}
+                              {(event.venue!=="TBD"||event.address)&&<span className="hm">{event.venue!=="TBD"?event.venue:event.address} · </span>}
                               <span style={{color:"#555"}}>{event.city}{event.state?`, ${event.state}`:""}</span>
                               {event.region&&<span style={{marginLeft:6,color:"#2e2e2e",fontSize:10}}>{REGION_META[event.region]?.label}</span>}
                             </div>
@@ -340,9 +340,11 @@ export default function App() {
                 )}
                 <div style={{display:"flex",gap:14}}>
                   <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:10,letterSpacing:"0.12em",color:"#444",textTransform:"uppercase",width:60,minWidth:60,paddingTop:1}}>Venue</span>
-                  {selected.venue!=="TBD"
-                    ?<a href={googleMapsUrl(selected.venue,selected.city,selected.state)} target="_blank" rel="noopener noreferrer" className="mlink" style={{fontFamily:"'Barlow',sans-serif",fontSize:13,color:"#A8A098"}}>{selected.venue} ↗</a>
-                    :<span style={{fontFamily:"'Barlow',sans-serif",fontSize:13,color:"#333"}}>TBD</span>}
+                 {selected.venue!=="TBD"
+  ?<a href={googleMapsUrl(selected.venue,selected.city,selected.state,selected.address)} target="_blank" rel="noopener noreferrer" className="mlink" style={{fontFamily:"'Barlow',sans-serif",fontSize:13,color:"#A8A098"}}>{selected.venue} ↗</a>
+  :selected.address
+    ?<a href={googleMapsUrl(selected.venue,selected.city,selected.state,selected.address)} target="_blank" rel="noopener noreferrer" className="mlink" style={{fontFamily:"'Barlow',sans-serif",fontSize:13,color:"#A8A098"}}>{selected.address} ↗</a>
+    :<span style={{fontFamily:"'Barlow',sans-serif",fontSize:13,color:"#333"}}>TBD</span>}
                 </div>
                 <div style={{display:"flex",gap:14}}>
                   <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:10,letterSpacing:"0.12em",color:"#444",textTransform:"uppercase",width:60,minWidth:60,paddingTop:1}}>Location</span>
