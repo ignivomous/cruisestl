@@ -169,8 +169,8 @@ export default function App() {
             <div style={{display:"flex",alignItems:"baseline",gap:10,flexWrap:"wrap"}}>
               <h1 style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:"clamp(34px,5.5vw,58px)",letterSpacing:"0.06em",lineHeight:1,color:"#F0E8D8",display:"flex",alignItems:"center",gap:"0.15em"}}>
   CRUISE
-  <img src="/steeringwheel.png" alt="" style={{height:"0.8em",width:"0.8em",display:"inline-block"}}/>
-  <span style={{color:"#E84040"}}>STL</span>
+  <img src="/steeringwheel.png" alt="" style={{height:"0.6em",width:"0.6em",display:"inline-block",verticalAlign:"middle",marginBottom:"0.05em"}}/>
+  STL
 </h1>
               <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:12,fontWeight:600,letterSpacing:"0.2em",color:"#E84040",textTransform:"uppercase"}}>2026 Season</span>
             </div>
