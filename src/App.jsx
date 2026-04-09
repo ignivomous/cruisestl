@@ -169,7 +169,7 @@ export default function App() {
             <div style={{display:"flex",alignItems:"baseline",gap:10,flexWrap:"wrap"}}>
               <h1 style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:"clamp(34px,5.5vw,58px)",letterSpacing:"0.06em",lineHeight:1,color:"#F0E8D8",display:"flex",alignItems:"center",gap:"0.15em"}}>
   CRUISE
-  <img src="/steeringwheel.png" alt="" style={{height:"0.6em",width:"0.6em",display:"inline-block",verticalAlign:"middle",marginBottom:"0.1em"}}/>
+  <img src="/steeringwheel.png" alt="" style={{height:"0.6em",width:"0.6em",display:"inline-block",verticalAlign:"middle",marginBottom:"0.15em"}}/>
   STL
 </h1>
               
