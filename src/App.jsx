@@ -169,10 +169,10 @@ export default function App() {
             <div style={{display:"flex",alignItems:"baseline",gap:10,flexWrap:"wrap"}}>
               <h1 style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:"clamp(34px,5.5vw,58px)",letterSpacing:"0.06em",lineHeight:1,color:"#F0E8D8",display:"flex",alignItems:"center",gap:"0.15em"}}>
   CRUISE
-  <img src="/steeringwheel.png" alt="" style={{height:"0.6em",width:"0.6em",display:"inline-block",verticalAlign:"middle",marginBottom:"0.05em"}}/>
+  <img src="/steeringwheel.png" alt="" style={{height:"0.6em",width:"0.6em",display:"inline-block",verticalAlign:"middle",marginBottom:"0.1em"}}/>
   STL
 </h1>
-              <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:12,fontWeight:600,letterSpacing:"0.2em",color:"#E84040",textTransform:"uppercase"}}>2026 Season</span>
+              
             </div>
             <p className="hm" style={{fontFamily:"'Barlow',sans-serif",fontSize:12,color:"#444",marginTop:2}}>Shows · Cruise Nights · Swap Meets · Drag Races — St. Louis region</p>
           </div>
@@ -263,7 +263,7 @@ export default function App() {
                     const meta=TYPE_META[types[0]]||TYPE_META["other"];
                     return(
                       <div key={event.id} className={`ecard${past?" past":""}`} onClick={()=>setSelected(event)}
-                        style={{display:"flex",alignItems:"stretch",background:"rgba(255,255,255,0.012)",borderLeft:`3px solid ${meta.color}`,borderRadius:2}}>
+  style={{display:"flex",alignItems:"stretch",background:event.featured?"rgba(245,166,35,0.05)":"rgba(255,255,255,0.012)",borderLeft:`3px solid ${event.featured?"#F5A623":meta.color}`,borderRadius:2}}>
                         <div style={{width:56,minWidth:56,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"11px 0",borderRight:"1px solid #161616"}}>
                           <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:9,fontWeight:600,letterSpacing:"0.15em",color:"#3a3a3a"}}>{getDayOfWeek(event.date)}</div>
                           <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:22,lineHeight:1,color:"#B8A88A",marginTop:1}}>{getDay(event.date)}</div>
@@ -308,7 +308,9 @@ export default function App() {
 
             {/* Footer */}
             <div style={{marginTop:56,paddingTop:18,borderTop:"1px solid #181818",display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:10}}>
-              <span style={{fontFamily:"'Barlow',sans-serif",fontSize:11,color:"#2a2a2a"}}>Community-sourced · St. Louis car culture</span>
+              <span style={{fontFamily:"'Barlow',sans-serif",fontSize:11,color:"#2a2a2a"}}>
+  Community-sourced · St. Louis car culture · <a href="mailto:cruisestlcom@gmail.com" style={{color:"#333",textDecoration:"none"}}>Something missing? Let us know</a>
+</span>
               <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:10,color:"#222",letterSpacing:"0.1em"}}>CRUISESTL · 2026</span>
             </div>
           </>
