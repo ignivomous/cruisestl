@@ -311,7 +311,7 @@ export default function App() {
               <span style={{fontFamily:"'Barlow',sans-serif",fontSize:11,color:"#2a2a2a"}}>
   Community-sourced · St. Louis car culture · <a href="mailto:cruisestlcom@gmail.com" style={{color:"#333",textDecoration:"none"}}>Something missing? Let us know</a>
 </span>
-              <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:10,color:"#222",letterSpacing:"0.1em"}}>CRUISESTL · 2026</span>
+              <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:10,color:"#222",letterSpacing:"0.1em"}}>CRUISESTL · © 2026</span>
             </div>
           </>
         )}
@@ -379,7 +379,7 @@ function MRow({label,value}){
   return(
     <div style={{display:"flex",gap:14}}>
       <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:10,letterSpacing:"0.12em",color:"#444",textTransform:"uppercase",width:60,minWidth:60,paddingTop:1}}>{label}</span>
-      <span style={{fontFamily:"'Barlow',sans-serif",fontSize:13,color:"#A8A098"}}>{value}</span>
+      <span style={{fontFamily:"'Barlow',sans-serif",fontSize:13,color:"#A8A098"}}>{value}</span> 
     </div>
   );
 }
