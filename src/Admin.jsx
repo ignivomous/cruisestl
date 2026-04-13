@@ -193,7 +193,7 @@ export default function Admin() {
                   <div className="row"><span className="rlabel">Region</span><span className="rval">{sub.region || "—"}</span></div>
                   {sub.url && <div className="row"><span className="rlabel">Link</span><a href={sub.url} target="_blank" rel="noopener noreferrer" style={{ fontFamily: "'Barlow',sans-serif", fontSize: 13, color: "#F5A623", textDecoration: "none" }}>{sub.url}</a></div>}
                   {sub.notes && <div className="row"><span className="rlabel">Notes</span><span className="rval">{sub.notes}</span></div>}
-                  {sub.notes && <div className="row"><span className="rlabel">Notes</span><span className="rval">{sub.notes}</span></div>}
+                  
                   {(sub.submitter_name || sub.submitter_email) && (
                     <div className="row">
                       <span className="rlabel">From</span>
