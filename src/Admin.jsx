@@ -196,16 +196,16 @@ const handleImageUpload = async (e) => {
   setError(null);
   const ext = file.name.split(".").pop();
 const path = `submissions/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-  console.log("Uploading to path:", path);
+
   const { data: uploadData, error: uploadError } = await supabase.storage
   .from("flyers")
   .upload(path, file, { contentType: file.type });
-  console.log("Upload result:", uploadData, uploadError);
+
   if (uploadError) {
     setError(`Image upload failed: ${uploadError.message}`);
   } else {
     const { data: urlData } = supabase.storage.from("flyers").getPublicUrl(path);
-    console.log("Public URL:", urlData);
+  
     set("image")(urlData.publicUrl);
   }
   setUploading(false);
