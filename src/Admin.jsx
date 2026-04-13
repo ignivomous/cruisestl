@@ -70,7 +70,7 @@ function EventCard({ event, onSave, onDelete }) {
     if (!file) return;
     setUploading(true);
     const ext = file.name.split(".").pop();
-    const path = `flyers/${Date.now()}.${ext}`;
+    const path = `${Date.now()}.${ext}`;
     const { error } = await supabase.storage.from("flyers").upload(path, file, { upsert: true });
     if (!error) {
       const { data: urlData } = supabase.storage.from("flyers").getPublicUrl(path);
@@ -190,7 +190,7 @@ const handleImageUpload = async (e) => {
   setUploading(true);
   setError(null);
   const ext = file.name.split(".").pop();
-  const path = `flyers/${Date.now()}.${ext}`;
+  const path = `${Date.now()}.${ext}`;
   console.log("Uploading to path:", path);
   const { data: uploadData, error: uploadError } = await supabase.storage.from("flyers").upload(path, file, { upsert: true });
   console.log("Upload result:", uploadData, uploadError);
