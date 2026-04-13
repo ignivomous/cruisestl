@@ -381,7 +381,7 @@ function MRow({label,value}){
   return(
     <div style={{display:"flex",gap:14}}>
       <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:10,letterSpacing:"0.12em",color:"#444",textTransform:"uppercase",width:60,minWidth:60,paddingTop:1}}>{label}</span>
-      <span style={{fontFamily:"'Barlow',sans-serif",fontSize:13,color:"#A8A098"}}>{value}</span> 
+      <span style={{fontFamily:"'Barlow',sans-serif",fontSize:13,color:"#A8A098",whiteSpace:"pre-line"}}>{value}</span> 
     </div>
   );
 }
