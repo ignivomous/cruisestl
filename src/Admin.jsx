@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "./supabase";
 
@@ -12,22 +12,58 @@ function formatDate(dateStr) {
   return new Date(dateStr + "T12:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 }
 
-function EditableField({ label, value, onChange, type = "text", options = null }) {
-  if (options) {
-    return (
-      <div className="row">
-        <span className="rlabel">{label}</span>
+function TypeSelector({ value, onChange }) {
+  const selected = (value || "car-show").split(",").map(t => t.trim()).filter(Boolean);
+  const available = TYPES.filter(t => !selected.includes(t));
+
+  const remove = (type) => {
+    const next = selected.filter(t => t !== type);
+    onChange(next.join(","));
+  };
+
+  const add = (type) => {
+    if (!type) return;
+    const next = [...selected, type];
+    onChange(next.join(","));
+  };
+
+  return (
+    <div style={{ display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center" }}>
+      {selected.map(t => (
+        <span key={t} style={{
+          display: "inline-flex", alignItems: "center", gap: 5,
+          padding: "2px 8px", borderRadius: 2,
+          background: "rgba(232,64,64,0.1)", border: "1px solid rgba(232,64,64,0.2)",
+          fontFamily: "'Barlow Condensed',sans-serif", fontSize: 10, fontWeight: 600,
+          letterSpacing: "0.1em", textTransform: "uppercase", color: "#E84040"
+        }}>
+          {t}
+          <button
+            onClick={() => remove(t)}
+            style={{ background: "none", border: "none", color: "#E84040", cursor: "pointer", fontSize: 12, lineHeight: 1, padding: 0, opacity: 0.6 }}
+          >×</button>
+        </span>
+      ))}
+      {available.length > 0 && (
         <select
-          className="finput"
-          value={value || ""}
-          onChange={e => onChange(e.target.value)}
-          style={{ width: "auto", minWidth: 160, padding: "3px 8px", fontSize: 13 }}
+          value=""
+          onChange={e => add(e.target.value)}
+          style={{
+            background: "#0f0f0f", border: "1px dashed #333", borderRadius: 2,
+            color: "#555", fontFamily: "'Barlow Condensed',sans-serif",
+            fontSize: 10, fontWeight: 600, letterSpacing: "0.1em",
+            textTransform: "uppercase", padding: "2px 6px", cursor: "pointer", outline: "none"
+          }}
         >
-          {options.map(o => <option key={o} value={o}>{o}</option>)}
+          <option value="">+ Add type</option>
+          {available.map(t => <option key={t} value={t}>{t}</option>)}
         </select>
-      </div>
-    );
-  }
+      )}
+    </div>
+  );
+}
+
+function EditableField({ label, value, onChange, type = "text" }) {
   if (type === "textarea") {
     return (
       <div className="row">
@@ -52,6 +88,22 @@ function EditableField({ label, value, onChange, type = "text", options = null }
         onChange={e => onChange(e.target.value)}
         style={{ flex: 1, padding: "3px 8px", fontSize: 13 }}
       />
+    </div>
+  );
+}
+
+function RegionField({ value, onChange }) {
+  return (
+    <div className="row">
+      <span className="rlabel">Region</span>
+      <select
+        className="finput"
+        value={value || "out-of-region"}
+        onChange={e => onChange(e.target.value)}
+        style={{ width: "auto", minWidth: 180, padding: "3px 8px", fontSize: 13 }}
+      >
+        {REGIONS.map(r => <option key={r} value={r}>{r}</option>)}
+      </select>
     </div>
   );
 }
@@ -97,17 +149,10 @@ function SubmissionCard({ sub, onApprove, onReject }) {
             className="finput"
             value={fields.name || ""}
             onChange={e => set("name")(e.target.value)}
-            style={{ fontSize: 20, fontFamily: "'Bebas Neue',sans-serif", letterSpacing: "0.04em", color: "#F0E8D8", marginBottom: 8, background: "transparent", border: "1px solid #2a2a2a" }}
+            style={{ fontSize: 20, fontFamily: "'Bebas Neue',sans-serif", letterSpacing: "0.04em", color: "#F0E8D8", marginBottom: 10, background: "transparent", border: "1px solid #2a2a2a" }}
           />
-          <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-            <select
-              className="finput"
-              value={fields.types || "car-show"}
-              onChange={e => set("types")(e.target.value)}
-              style={{ width: "auto", fontSize: 11, fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", padding: "2px 8px" }}
-            >
-              {TYPES.map(t => <option key={t} value={t}>{t}</option>)}
-            </select>
+          <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
+            <TypeSelector value={fields.types} onChange={set("types")} />
             <label style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: "'Barlow Condensed',sans-serif", fontSize: 11, color: "#555", cursor: "pointer" }}>
               <input
                 type="checkbox"
@@ -133,7 +178,7 @@ function SubmissionCard({ sub, onApprove, onReject }) {
         <EditableField label="Address" value={fields.address} onChange={set("address")} />
         <EditableField label="City" value={fields.city} onChange={set("city")} />
         <EditableField label="State" value={fields.state} onChange={set("state")} />
-        <EditableField label="Region" value={fields.region} onChange={set("region")} options={REGIONS} />
+        <RegionField value={fields.region} onChange={set("region")} />
         <EditableField label="Link" value={fields.url} onChange={set("url")} />
         <EditableField label="Notes" value={fields.notes} onChange={set("notes")} type="textarea" />
 
@@ -181,18 +226,10 @@ function SubmissionCard({ sub, onApprove, onReject }) {
 
       {/* Actions */}
       <div style={{ display: "flex", gap: 8, paddingTop: 16, borderTop: "1px solid #1a1a1a" }}>
-        <button
-          className="approve-btn"
-          disabled={!!actionStatus}
-          onClick={handleApprove}
-        >
+        <button className="approve-btn" disabled={!!actionStatus} onClick={handleApprove}>
           {actionStatus === "approving" ? "Approving..." : "✓ Approve"}
         </button>
-        <button
-          className="reject-btn"
-          disabled={!!actionStatus}
-          onClick={handleReject}
-        >
+        <button className="reject-btn" disabled={!!actionStatus} onClick={handleReject}>
           {actionStatus === "rejecting" ? "Rejecting..." : "Reject"}
         </button>
       </div>
@@ -277,7 +314,6 @@ export default function Admin() {
         .rval{font-family:'Barlow',sans-serif;font-size:13px;color:#888;}
       `}</style>
 
-      {/* Header */}
       <div style={{ borderBottom: "1px solid #1a1a1a" }}>
         <div className="stripe" />
         <div style={{ padding: "18px 40px 14px", maxWidth: 800, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
