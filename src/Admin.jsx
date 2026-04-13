@@ -4,7 +4,7 @@ import { supabase } from "./supabase";
 
 const ADMIN_PASSWORD = "cruisestl2026";
 const REGIONS = ["city-central", "west", "south", "east", "north", "out-of-region"];
-const TYPES = ["car-show", "cruise-night", "swap-meet", "car-meet", "race"];
+const TYPES = ["car-show", "cruise", "swap-meet", "car-meet", "race", "other"];
 
 function TypeSelector({ value, onChange }) {
   const selected = (value || "car-show").split(",").map(t => t.trim()).filter(Boolean);

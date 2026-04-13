@@ -6,12 +6,12 @@ const MONTHS = ["April","May","June","July","August","September","October"];
 const MONTH_NUMS = [4,5,6,7,8,9,10];
 
 const TYPE_META = {
-  "car-show":        { label: "Car Show",      color: "#E84040", bg: "rgba(232,64,64,0.15)" },
-  "cruise-night":    { label: "Cruise Night",  color: "#F5A623", bg: "rgba(245,166,35,0.15)" },
-  "swap-meet":       { label: "Swap Meet",     color: "#4ECDC4", bg: "rgba(78,205,196,0.15)" },
-  "drag-race":       { label: "Drag Race",     color: "#A78BFA", bg: "rgba(167,139,250,0.15)" },
-  "cars-and-coffee": { label: "Cars & Coffee", color: "#34D399", bg: "rgba(52,211,153,0.15)" },
-  "other":           { label: "Other",         color: "#94A3B8", bg: "rgba(148,163,184,0.15)" },
+  "car-show":   { label: "Car Show",   color: "#E84040", bg: "rgba(232,64,64,0.15)" },
+  "cruise":     { label: "Cruise",     color: "#F5A623", bg: "rgba(245,166,35,0.15)" },
+  "swap-meet":  { label: "Swap Meet",  color: "#4ECDC4", bg: "rgba(78,205,196,0.15)" },
+  "car-meet":   { label: "Car Meet",   color: "#A78BFA", bg: "rgba(167,139,250,0.15)" },
+  "race":       { label: "Drag Race",  color: "#A78BFA", bg: "rgba(167,139,250,0.15)" },
+  "other":      { label: "Other",      color: "#94A3B8", bg: "rgba(148,163,184,0.15)" },
 };
 
 const REGION_META = {
