@@ -65,19 +65,22 @@ function EventCard({ event, onSave, onDelete }) {
   const fileRef = useRef();
   const set = (key) => (val) => setFields(f => ({ ...f, [key]: val }));
 
-  const handleImageUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    setUploading(true);
-    const ext = file.name.split(".").pop();
-    const path = `${Date.now()}.${ext}`;
-    const { error } = await supabase.storage.from("flyers").upload(path, file, { upsert: true });
-    if (!error) {
-      const { data: urlData } = supabase.storage.from("flyers").getPublicUrl(path);
-      set("image")(urlData.publicUrl);
-    }
-    setUploading(false);
-  };
+const handleImageUpload = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  setUploading(true);
+  setError(null);
+  const ext = file.name.split(".").pop();
+  const path = `${Date.now()}.${ext}`;
+  const { data: uploadData, error: uploadError } = await supabase.storage.from("flyers").upload(path, file, { upsert: true });
+  if (uploadError) {
+    setError(`Upload failed: ${uploadError.message}`);
+  } else {
+    const { data: urlData } = supabase.storage.from("flyers").getPublicUrl(path);
+    set("image")(urlData.publicUrl);
+  }
+  setUploading(false);
+};
 
   const handleSave = async () => {
     setStatus("saving");
