@@ -119,7 +119,7 @@ const { data: uploadData, error: uploadError } = await supabase.storage
     <div className="card">
       <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12, marginBottom: 16 }}>
         <div style={{ flex: 1 }}>
-          <input className="finput" value={fields.name || ""} onChange={e => set("name")(e.target.value)} style={{ fontSize: 20, fontFamily: "'Bebas Neue',sans-serif", letterSpacing: "0.04em", color: "#F0E8D8", marginBottom: 10, background: "transparent", border: "1px solid #2a2a2a" }} />
+          <input className="finput" value={fields.name || ""} onChange={e => set("name")(e.target.value)} style={{ fontSize: 20, fontFamily: "'Barlow',sans-serif", letterSpacing: "0.04em", color: "#F0E8D8", marginBottom: 10, background: "transparent", border: "1px solid #2a2a2a" }} />
           <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
             <TypeSelector value={fields.types} onChange={set("types")} />
             <label style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: "'Barlow Condensed',sans-serif", fontSize: 11, color: "#555", cursor: "pointer" }}>
@@ -251,7 +251,7 @@ const path = `submissions/${Date.now()}-${Math.random().toString(36).slice(2)}.$
     <div className="card">
       <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12, marginBottom: 16 }}>
         <div style={{ flex: 1 }}>
-          <input className="finput" value={fields.name || ""} onChange={e => set("name")(e.target.value)} style={{ fontSize: 20, fontFamily: "'Bebas Neue',sans-serif", letterSpacing: "0.04em", color: "#F0E8D8", marginBottom: 10, background: "transparent", border: "1px solid #2a2a2a" }} />
+          <input className="finput" value={fields.name || ""} onChange={e => set("name")(e.target.value)} style={{ fontSize: 20, fontFamily: "'Barlow',sans-serif", letterSpacing: "0.04em", color: "#F0E8D8", marginBottom: 10, background: "transparent", border: "1px solid #2a2a2a" }} />
           <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
             <TypeSelector value={fields.types} onChange={set("types")} />
             <label style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: "'Barlow Condensed',sans-serif", fontSize: 11, color: "#555", cursor: "pointer" }}>
