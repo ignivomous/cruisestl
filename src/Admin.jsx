@@ -71,8 +71,10 @@ const handleImageUpload = async (e) => {
   setUploading(true);
   setError(null);
   const ext = file.name.split(".").pop();
-  const path = `submissions/${Date.now()}.${ext}`;
-  const { data: uploadData, error: uploadError } = await supabase.storage.from("flyers").upload(path, file, { upsert: true });
+const path = `submissions/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+const { data: uploadData, error: uploadError } = await supabase.storage
+  .from("flyers")
+  .upload(path, file, { contentType: file.type });
   if (uploadError) {
     setError(`Upload failed: ${uploadError.message}`);
   } else {
@@ -193,9 +195,11 @@ const handleImageUpload = async (e) => {
   setUploading(true);
   setError(null);
   const ext = file.name.split(".").pop();
-  const path = `submissions/${Date.now()}.${ext}`;
+const path = `submissions/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
   console.log("Uploading to path:", path);
-  const { data: uploadData, error: uploadError } = await supabase.storage.from("flyers").upload(path, file, { upsert: true });
+  const { data: uploadData, error: uploadError } = await supabase.storage
+  .from("flyers")
+  .upload(path, file, { contentType: file.type });
   console.log("Upload result:", uploadData, uploadError);
   if (uploadError) {
     setError(`Image upload failed: ${uploadError.message}`);
